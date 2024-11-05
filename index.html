@@ -1,84 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="index.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+        crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <title>Weather App</title>
 </head>
+
 <body>
     <div class="container">
-        
+
         <h1>Weather App</h1>
         <div class="content">
 
-        <div class="weather_buttons">
-
-            <button id="your_weather">Your Weather</button>
-
-            <button id ="search_weather">Search Weather</button>
-
-          
-        </div>
-
-<hr class="line ">
-
-
-        <div class="input_container active">
-       <input id="input" type="text" placeholder="Enter the city ">
-       <button id="btn">Search here </button>
-    </div>
-    <hr class="line">
-    <div class="weather-info active">
-        <div class="display-data">
-        <div class="city-name">
-            <p class="city-name"></p>
-
-        </div>
-
-        <div class="temp">
-            <i class="fa-light fa-temperature-three-quarters fa-flip-horizontal" ></i>
-            <p class="temp"> </p>
-        </div>
-        </div>
-         
-        <div class="all-data">
-            <div class="wind-info">
-                <i class="fa-solid fa-wind 5xl " style="color:white; font-size: 5rem;"></i>
-                <p >wind Speed</p>
-                <p class="wind_speed_data"></p>
+            <div class="weather_buttons">
+            </div>
+            <div class="input_container ">
+                <input id="input" type="text" placeholder="Enter the city ">
+                <button id="btn">Search here </button>
 
             </div>
 
-            <div class="humidity-info">
-                <i class="fa-solid fa-water" style="color: white;font-size: 5rem;"></i>
-                 <p class="humidity">Humidity</p>
-                 <p class="humidity_data"></p>
+            <div class="weather-info active ">
+                <div class="display-data">
+                    <div class="city-name">
+                        <p class="city-name"></p>
+
+                    </div>
+
+                    <div class="temp">
+                        <i class="fa-light fa-temperature-three-quarters fa-flip-horizontal"></i>
+                        <p class="temp"> </p>
+                    </div>
+                </div>
+
+                <div class="all-data">
+                    <div class="wind-info">
+                        <img class="image" src="./images/wind.png" height="50px">
+                        <p>wind Speed</p>
+                        <p class="wind_speed_data"></p>
+
+                    </div>
+
+                    <div class="humidity-info">
+                        <img class="image" src="./images/humidity.png" height="50px">
+                        <p class="humidity">Humidity</p>
+                        <p class="humidity_data"></p>
+                    </div>
+
+                    <div class="fills_like">
+                        <img class="image" src="./images/feel-like.png" height="50px">
+                        <p>Fells like </p>
+                        <p class="fills_like_data"></p>
+
+                    </div>
+                </div>
             </div>
 
-            <div class="fills_like">
-                <i class="fa-solid fa-temperature-empty" style="color: white;font-size: 5rem; font-weight:800;"></i>
-                <p>Fells like </p>
-                <p class="fills_like_data"></p>
+        </div>
 
-            </div>
-        </div>
-    </div>
-    <div class="grant_access ">
-        <div class="location">
-            <i class="fa-solid fa-location-dot" style="color: #74C0FC; font-size: 8rem;"></i>
-        </div>
-        <p>Grant Location</p>
-    
-        <button class="access_location">Grant Access </button>
-    </div>  
     </div>
 
-</div>
 
-    
     <script src="index.js"></script>
 </body>
+
 </html>
