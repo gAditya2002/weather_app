@@ -1,8 +1,9 @@
 console.log("Weather app");
 
+const weather_condition = document.querySelector(".weather_condition");
 const search_button = document.getElementById("btn");
 const input_field = document.getElementById("input");
-
+const condition = document.querySelector(".condition");
 const input_container = document.querySelector(".input_container");
 const weather_info = document.querySelector(".weather-info");
 const city_name = document.querySelector(".city-name");
@@ -10,195 +11,143 @@ const temp = document.querySelector(".temp");
 const humidity = document.querySelector(".humidity_data");
 const wind_speed = document.querySelector(".wind_speed_data");
 const fills_like = document.querySelector(".fills_like_data");
-const grant_access = document.querySelector(".grant_access");
+
 const location_user = document.querySelector(".access_location");
-const morning = document.querySelector(".morning");
 const container = document.querySelector(".container");
+const loading = document.querySelector(".loading");
 
-let key = "82005d27a116c2880c8f0fcb866998a0";
+const key = "82005d27a116c2880c8f0fcb866998a0";
 
-document.addEventListener('DOMContentLoaded', () => {
-    getUserLocation();
-});
+document.addEventListener('DOMContentLoaded', getUserLocation);
 
 function getUserLocation() {
-    console.log("Fetching user location...");
-
     if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(
-            (position) => {
-                const coordinates = {
-                    latitude: position.coords.latitude,
-                    longitude: position.coords.longitude,
-                };
-                console.log("User location:", coordinates);
-                fetchWeather(coordinates);
-            },
-            (error) => {
-                console.error("Error getting location:", error);
-                alert("Unable to retrieve your location. Please enable location services.");
+            (position) => fetchWeather({
+                latitude: position.coords.latitude,
+                longitude: position.coords.longitude
+            }),
+            () => {
+                location_user.classList.add("active");
+                location_user.addEventListener("click", requestLocationAccess);
             }
         );
     } else {
-        console.log("Geolocation is not supported by this browser.");
         alert("Geolocation is not supported by your browser.");
     }
 }
 
-async function fetchWeather(coordinates) {
-    const { latitude, longitude } = coordinates;
+function requestLocationAccess() {
+    navigator.geolocation.getCurrentPosition(
+        (position) => fetchWeather({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude
+        }),
+        () => {
+            alert("Please enable location services to get weather data.");
+            location_user.classList.remove("active");
+        }
+    );
+}
 
+async function fetchWeather({ latitude, longitude }) {
     try {
+        showLoading();
         const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`);
         const data = await response.json();
-        displayUpdate(data);
 
         if (data.cod === 200) {
-            console.log(data);
-            weather_info.classList.remove("active");
+            displayUpdate(data);
         } else {
-            console.error("Error fetching weather data:", data.message);
-            alert("Error fetching weather data: " + data.message);
+            showErrorMessage("Error fetching weather data: " + data.message);
         }
     } catch (err) {
-        console.error("Error occurred while fetching weather data:", err);
-        alert("Unable to fetch weather data. Please try again.");
+        showErrorMessage("Unable to fetch weather data. Please try again.");
+    } finally {
+        hideLoading();
     }
 }
 
 function displayUpdate(data) {
-    city_name.innerHTML = data.name;
+    city_name.innerHTML = `${data.name}, ${data.sys.country}`;
+    temp.innerHTML = `${Math.floor(data.main.temp - 273.15)} °C`;
+    humidity.innerHTML = `${data.main.humidity} %`;
+    wind_speed.innerHTML = `${data.wind.speed} km/h`;
+    fills_like.innerHTML = `${Math.floor(data.main.feels_like - 273.15)} °C`;
+    condition.innerHTML = data.weather[0].description;
 
-    let kelvine = data.main.temp;
-    const calcius = kelvine - 273.15;
-    temp.innerHTML = Math.floor(calcius) + " °C";
+    const icon = data.weather[0].icon;
+    document.getElementById("weatherIcon").src = `./images/${icon}.png`;
 
-    humidity.innerHTML = data.main.humidity + " %";
-    wind_speed.innerHTML = data.wind.speed + " km/h";
-
-    let feels = data.main.feels_like;
-    const convert_feels = feels - 273.15;
-    fills_like.innerHTML = Math.floor(convert_feels);
-
-    let sunrise = new Date(data.sys.sunrise * 1000).toLocaleTimeString();
-    let sunset = new Date(data.sys.sunset * 1000).toLocaleTimeString();
-
-    console.log("Sunrise:", sunrise);
-    console.log("Sunset:", sunset);
-
-    let currentDate = new Date();
-    let timeOfDay = getTimeOfDay(currentDate, data.sys.sunrise, data.sys.sunset);
-    console.log("Time of Day: " + timeOfDay);
-
-    applyBackgroundStyle(timeOfDay);
+    setBackgroundColor(icon);
+    weather_info.style.display = "block";
 }
 
-function getTimeOfDay(currentTime, sunriseTime, sunsetTime) {
-    const sunrise = new Date(sunriseTime * 1000);
-    const sunset = new Date(sunsetTime * 1000);
+function setBackgroundColor(icon) {
+    container.classList.remove("day", "night");
 
-    if (currentTime < sunrise) {
-        return "Morning";
-    } else if (currentTime >= sunrise && currentTime < sunset) {
-        return "Afternoon";
-    } else {
-        return "Evening";
+    if (icon === "01d") {
+        container.classList.add("day");
+    } else if (icon === "01n") {
+        container.classList.add("night");
     }
-}
-
-function applyBackgroundStyle(timeOfDay) {
-    const container = document.querySelector(".container");
-
-    switch (timeOfDay) {
-        case "Morning":
-            container.style.backgroundImage = "url('../images/sunrise.jpg')";
-            break;
-        case "Afternoon":
-            container.style.backgroundImage = "url('../images/sunrise.jpg')";
-            break;
-        case "Evening":
-            container.style.backgroundImage = "url('../images/sunset.jpg')";
-            break;
-        default:
-            break;
-    }
-
-    container.style.backgroundSize = "cover";
-    container.style.backgroundPosition = "center";
-    container.style.backgroundRepeat = "no-repeat";
-    container.style.height = "100vh";
-    container.style.width = "100%";
 }
 
 search_button.addEventListener("click", handleClick);
+input_field.addEventListener("keydown", (event) => {
+    if (event.key === "Enter") handleClick();
+});
 
 function handleClick() {
     const city = input_field.value.trim();
 
     if (city === "") {
-        alert("Please enter a city name.");
+        showErrorMessage("Please enter a city name.");
         return;
     }
 
+    hideErrorMessage();  // Hide any existing error messages
+    showLoading();
+    weather_info.style.display = "none";
     getCoordinates(city);
-    resetActiveClasses();
 }
 
 async function getCoordinates(city) {
-    if (!city) {
-        alert("Please enter a city name.");
-        return;
-    }
-
     try {
-        let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
-        let data = await response.json();
-
-        if (data.cod === 200) {
-            const coordinates = {
-                latitude: data.coord.lat,
-                longitude: data.coord.lon,
-            };
-            weather(coordinates);
-        } else {
-            alert("City not found, please try again.");
-            console.error("City not found:", data.message);
-        }
-    } catch (err) {
-        console.error("Error occurred while fetching coordinates:", err);
-        alert("Error occurred while fetching coordinates.");
-    }
-}
-
-async function weather(coordinate) {
-    if (!coordinate) {
-        console.error("No coordinate provided");
-        return;
-    }
-
-    const { latitude, longitude } = coordinate;
-
-    try {
-        let response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`);
+        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
         const data = await response.json();
 
-        if (data.cod !== 200) {
-            throw new Error(data.message || "Failed to fetch weather data");
+        if (data.cod === 200) {
+            fetchWeather({
+                latitude: data.coord.lat,
+                longitude: data.coord.lon
+            });
+        } else {
+            showErrorMessage("City not found. Make sure you enter the correct city.");
         }
-
-        displayUpdate(data);
-
-    } catch (err) {
-        console.log("Error occurred in fetching the data", err);
-        alert("Unable to fetch weather data. Please try again.");
+    } catch {
+        showErrorMessage("Error occurred while fetching coordinates.");
+    } finally {
+        hideLoading();
     }
 }
 
-function resetActiveClasses() {
-    if (weather_info) {
-        weather_info.classList.remove("active");
-    }
-    if (grant_access) {
-        grant_access.classList.remove("active");
-    }
+function showErrorMessage(message) {
+    weather_info.style.display = "none";
+    const errorMessage = document.querySelector(".error-message");
+    errorMessage.style.display = "block";
+    errorMessage.textContent = message;
+}
+
+function hideErrorMessage() {
+    const errorMessage = document.querySelector(".error-message");
+    errorMessage.style.display = "none";
+}
+
+function showLoading() {
+    loading.style.display = "block";
+}
+
+function hideLoading() {
+    loading.style.display = "none";
 }

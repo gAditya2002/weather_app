@@ -1,7 +1,7 @@
 * {
   padding: 0;
   margin: 0;
-  box-sizing: border-box; /* Prevents padding/margin from affecting element size */
+  box-sizing: border-box;
 }
 
 h1 {
@@ -16,12 +16,14 @@ h1 {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(90deg, #77ebf6, #ab6ef9);
+  background: linear-gradient(90deg, #77ebf6, #ab6ef9);  
+  background-size: cover;
+  background-position: center;
 }
 
 .content {
   padding: 10px;
-  width: 35%;
+  width: 30%;
   background-color: #f1f1f1;
   justify-content: space-between;
   box-shadow: 0px 5px 20px white;
@@ -33,6 +35,7 @@ h1 {
   flex-wrap: wrap; /* Allows buttons to wrap on small screens */
   gap: 10px; /* Adds spacing between buttons */
 }
+
 
 .weather_buttons button {
   padding: 10px;
@@ -64,7 +67,7 @@ h1 {
   padding: 5px;
   display: flex;
   justify-content: space-between;
-  flex-wrap: wrap; /* Allows cards to wrap on smaller screens */
+  flex-wrap: wrap;
   gap: 10px;
 }
 
@@ -86,7 +89,7 @@ h1 {
 }
 
 .all-data div p {
-  margin-top: 20px;
+  margin-top: 10px;
   color: white;
   font-weight: 800;
   font-size: 1.2rem;
@@ -95,9 +98,20 @@ h1 {
 .display-data {
   padding: 15px;
   text-align: center;
-  font-size: 2rem;
   font-weight: bold;
-  color: #495057;
+}
+
+.city-name{
+  color: rgb(184, 16, 114);
+  text-align: center;
+  font-weight: 800;
+  font-size: 1.2rem;
+}
+
+.display-data .temp {
+  color: rgb(184, 16, 114);
+  font-size: 3rem;
+  color: rgb(53, 36, 104);
 }
 
 .input_container input {
@@ -114,10 +128,11 @@ h1 {
 }
 
 #btn {
-  padding: 10px;
+  padding: 8px;
   font-size: 1rem;
   color: white;
-  font-weight: 800;
+ 
+  border: 2px solid #3096be;
   background-color: #3096be;
   border: none;
   border-radius: 5px;
@@ -171,9 +186,36 @@ h1 {
   color: white;
 }
 
-/* -------------------- RESPONSIVE STYLES -------------------- */
+.weather_condition_image {
+  text-align: center;
+}
 
-/* For tablets and smaller screens */
+.weather_condition {
+  color: rgb(201, 67, 118);
+  text-align: center;
+  font-size: 1.2rem;
+  font-weight: 800;
+}
+
+.weather-icon {
+  margin-bottom: 10px;
+}
+
+.weather-icon-img {
+  width: 70px;
+  height: 70px;
+  object-fit: contain;
+}
+
+
+.container.day {
+  background-image: url('./images/sunrise.jpg');  /* Daytime background image */
+}
+
+.container.night {
+  background-image: url('./images/sunset.jpg');  /* Nighttime background image */
+}
+
 @media (max-width: 1024px) {
   .container {
     padding: 20px;
@@ -182,20 +224,27 @@ h1 {
   .content {
     width: 60%;
   }
-  .input_container{
+
+  .input_container {
     display: flex;
   }
 
-  #btn{
+  #btn {
     width: 30%;
     margin-left: 10px;
   }
+
   .weather_buttons button {
-    width: 30%; 
+    width: 30%;
+  }
+  .all-data{
+    gap: 0px;
+    width: 80%;
+    margin: auto;
   }
 
   .all-data div {
-    width: 30%; 
+    width: 28%;
   }
 
   .display-data {
@@ -203,7 +252,7 @@ h1 {
   }
 
   .input_container input {
-    width: 70%; /* Input takes more space on smaller screens */
+    width: 70%;
   }
 
   .input_container button {
@@ -214,6 +263,7 @@ h1 {
     width: 70%;
   }
 }
+
 @media (max-width: 768px) {
   .container {
     padding: 20px;
@@ -236,7 +286,7 @@ h1 {
   }
 
   .input_container input {
-    width: 70%; /* Input takes more space on smaller screens */
+    width: 70%;
   }
 
   .input_container button {
@@ -248,8 +298,8 @@ h1 {
   }
 }
 
-/* For mobile devices */
-@media (max-width: 480px) {
+
+@media (max-width: 470px) {
   .container {
     padding: 10px;
   }
@@ -257,18 +307,19 @@ h1 {
   .content {
     width: 90%;
   }
+
   .input_container {
     display: flex;
     flex-direction: column;
   }
 
   .weather_buttons button {
-    width: 30%; 
+    width: 30%;
   }
-  #btn{
+
+  #btn {
     width: 90%;
-    margin: 10px 0px 0px 0px ;
-  
+    margin: 10px 0px 0px 0px;
   }
 
   .all-data div {
@@ -276,9 +327,7 @@ h1 {
     padding: 10px;
   }
 
-  .display-data {
-    font-size: 1.3rem;
-  } 
+
 
   .input_container input {
     width: 90%;
@@ -291,13 +340,112 @@ h1 {
   .grant_access button {
     width: 90%;
   }
+.all-data{
+  
+  width: 100%;
+  margin-top: 10px;
+  gap:0px;
+}
   .all-data div p {
-    margin-top: 10px;
+
     color: white;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 14px;
   }
+  .all-data div{
+    margin: 7px;
+    border: 2px solid black;
+    width: 40%;
+  
+  }
+  .all-data div .image{
+    height: 30px;
+  }
+  .weather-icon{
+    height: 20px;
+  }
+  .display-data .temp{
+    font-size: 30px;
+  }
+ 
+
 }
+
+
+
+@media (max-width: 375px) {
+  .container {
+    padding: 10px;
+  }
+
+  .content {
+    width: 90%;
+  }
+
+  .input_container {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .weather_buttons button {
+    width: 30%;
+  }
+
+  #btn {
+    width: 90%;
+    margin: 10px 0px 0px 0px;
+  }
+
+  .all-data div {
+    width: 45%;
+    padding: 10px;
+  }
+
+
+
+  .input_container input {
+    width: 90%;
+  }
+
+  .input_container button {
+    width: 90%;
+  }
+
+  .grant_access button {
+    width: 90%;
+  }
+.all-data{
+  width: 100%;
+  margin-top: 10px;
+  gap:0px;
+}
+  .all-data div p {
+
+    color: white;
+    font-weight: 800;
+    font-size: 14px;
+  }
+  .all-data div{
+    margin: 7px;
+    border: 2px solid black;
+    width: 42%;
+  
+  }
+  .all-data div .image{
+    height: 30px;
+  }
+  .weather-icon{
+    height: 20px;
+  }
+  .display-data .temp{
+    font-size: 30px;
+  }
+ 
+
+}
+
+
+
 @media (max-width: 320px) {
   .container {
     padding: 10px;
@@ -306,18 +454,19 @@ h1 {
   .content {
     width: 90%;
   }
+
   .input_container {
     display: flex;
     flex-direction: column;
   }
 
   .weather_buttons button {
-    width: 30%; 
+    width: 30%;
   }
-  #btn{
+
+  #btn {
     width: 90%;
-    margin: 10px 0px 0px 0px ;
-  
+    margin: 10px 0px 0px 0px;
   }
 
   .all-data div {
@@ -325,9 +474,7 @@ h1 {
     padding: 10px;
   }
 
-  .display-data {
-    font-size: 1.3rem;
-  } 
+
 
   .input_container input {
     width: 90%;
@@ -340,10 +487,32 @@ h1 {
   .grant_access button {
     width: 90%;
   }
+.all-data{
+  width: 100%;
+  margin-top: 10px;
+  gap:0px;
+}
   .all-data div p {
-    margin-top: 10px;
+
     color: white;
     font-weight: 800;
-    font-size: 1rem;
+    font-size: 14px;
   }
+  .all-data div{
+    margin: 7px;
+    border: 2px solid black;
+    width: 42%;
+  
+  }
+  .all-data div .image{
+    height: 30px;
+  }
+  .weather-icon{
+    height: 20px;
+  }
+  .display-data .temp{
+    font-size: 30px;
+  }
+ 
+
 }
