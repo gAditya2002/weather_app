@@ -1,8 +1,4 @@
-console.log("Weather app");
-
 const weather_condition = document.querySelector(".weather_condition");
-// const search_button = document.getElementById("btn");
-// // document.querySelector("click" , handleClick )
 const input_field = document.getElementById("input");
 const condition = document.querySelector(".condition");
 const input_container = document.querySelector(".input_container");
@@ -93,8 +89,6 @@ function setBackgroundColor(icon) {
         container.classList.add("night");
     }
 }
-
-// search_button.addEventListener("click", handleClick);
 input_field.addEventListener("keydown", (event) => {
     if (event.key === "Enter") handleClick();
 });
