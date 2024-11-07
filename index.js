@@ -50,10 +50,18 @@ function requestLocationAccess() {
     );
 }
 
-async function fetchWeather({ latitude, longitude }) {
+async function fetchWeather({ latitude, longitude, city } ) {
     try {
         showLoading();
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`);
+        
+        let url;
+        if (city) {
+            url = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`;
+        } else {
+            url = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`;
+        }
+        
+        const response = await fetch(url);
         const data = await response.json();
 
         if (data.cod === 200) {
@@ -61,11 +69,11 @@ async function fetchWeather({ latitude, longitude }) {
         } else {
             showErrorMessage("Error fetching weather data: " + data.message);
         }
-    } catch (err) {
+    } 
+    catch (err) {
         showErrorMessage("Unable to fetch weather data. Please try again.");
-    } finally {
-        hideLoading();
-    }
+    } 
+    hideLoading()
 }
 
 function displayUpdate(data) {
@@ -106,30 +114,10 @@ function handleClick() {
         return;
     }
 
-    hideErrorMessage();  // Hide any existing error messages
+    hideErrorMessage();
     showLoading();
     weather_info.style.display = "none";
-    getCoordinates(city);
-}
-
-async function getCoordinates(city) {
-    try {
-        const response = await fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`);
-        const data = await response.json();
-
-        if (data.cod === 200) {
-            fetchWeather({
-                latitude: data.coord.lat,
-                longitude: data.coord.lon
-            });
-        } else {
-            showErrorMessage("City not found. Make sure you enter the correct city.");
-        }
-    } catch {
-        showErrorMessage("Error occurred while fetching coordinates.");
-    } finally {
-        hideLoading();
-    }
+    fetchWeather({ city });
 }
 
 function showErrorMessage(message) {
